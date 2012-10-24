@@ -1,0 +1,114 @@
+<html>
+
+    <head>
+        <script src="./plugins.js">
+        </script>
+        <script src="./passwordChecker.js">
+        </script>
+        <style>
+            /* #meter-bar { background-image: linear-gradient(left , rgb(255,0,0)
+            13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image: -o-linear-gradient(left
+            , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image:
+            -moz-linear-gradient(left , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0)
+            79%); background-image: -webkit-linear-gradient(left , rgb(255,0,0) 13%,
+            rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image: -ms-linear-gradient(left
+            , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image:
+            -webkit-gradient( linear, left bottom, right bottom, color-stop(0.13, rgb(255,0,0)),
+            color-stop(0.57, rgb(255,140,0)), color-stop(0.79, rgb(72,255,0)) ); }
+            */
+        </style>
+    </head>
+
+    <body>
+        <div>
+            Password:
+            <input type="text" name="passowrd" id="formPassword" />
+            <script>
+                    var passwordField = document.getElementById("formPassword");
+
+        var a = new PasswordComplexity();
+
+        a.bindTo(passwordField, {});
+
+        log(a);
+
+        passwordField.focus();
+
+
+            </script>
+        </div>
+        <style>
+            body { background-color: #ededed; } #password-strength-meter { position:
+            absolute; display: block; width: 250px; top: 0; left: 244px; background-color:
+            white; padding: 15px; border: 1px solid rgb(209, 209, 209); /*box-shadow:
+            0 1px 3px rgb(190, 190, 190);*/ } #meter-strength { font-size: small; text-align:
+            right; display: block; } .check-icon { width: 15px; height: 15px; display:
+            inline-block; vertical-align: middle; } .check-icon.checked { background-image:
+            url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAt0lEQVR42mNgoCPgBOIQINYDYkZSNMoC8VYgPg3EOqRo1ADiA0D8BIi1SdFoBcQngPg+ELuTqvEKEH8F4mIgZsGmSBnqD2RJRSDeD8R/gHgTEPNi08gExNVA/BiIy4BYHIj5gHg9EP8H4otALI/PeQ5A/BKIv0FDdBsQ/wbij0DsSYz/SqEa/kMxiN0LxOzEJoDlSAZcB2IDUkJXCYjPQzWnkZqKQIGXDsSbgZiVnPQLihIRmucSAOC0Inyqp4v1AAAAAElFTkSuQmCC');
+            } #password-strength-meter ul { list-style: none; padding: 10px 0; margin:
+            0; } #password-strength-direction { border-left: 10px solid transparent;
+            border-right: 10px solid black; display: inline-block; border-bottom: 10px
+            solid transparent; border-top: 10px solid transparent; position: absolute;
+            left: -20px; font-size: 0; border-style: inset; } #password-strength-direction2
+            { border-left: 10px solid transparent; border-right: 10px solid white;
+            display: inline-block; border-bottom: 10px solid transparent; border-top:
+            10px solid transparent; position: absolute; left: -20px; font-size: 0;
+            }
+        </style>
+        <div id="password-strength-meter">
+            <div id="password-strength-direction" class="">
+            </div>
+            <div id="password-strength-direction2" class="">
+            </div>
+            <span id="title">
+                Password Strength
+            </span>
+            <div id="meter-container">
+                <div id="meter-outer" style="display:block; width: 100%; height: 5px; background-color: #efefef; overflow: hidden;">
+                    <span id="meter-inner" style="display:block; height: 100%;">
+                    </span>
+                </div>
+                <span id="meter-strength">
+                    Invalid
+                </span>
+            </div>
+            <div>
+                Password should:
+                <ul>
+                    <li>
+                        <span id="numbers" class="check-icon">
+                        </span>
+                        <label for="numbers">
+                            have one number
+                        </label>
+                    </li>
+                    <li>
+                        <span id="lower" class="check-icon">
+                        </span>
+                        <label for="lower">
+                            have one lowercase character
+                        </label>
+                    </li>
+                    <li>
+                        <span id="upper" class="check-icon">
+                        </span>
+                        <label for="upper">
+                            have one uppercase character
+                        </label>
+                    </li>
+                    <li>
+                        <span id="length" class="check-icon">
+                        </span>
+                        <label for="length">
+                            be between 6 and 30 characters
+                        </label>
+                    </li>
+                </ul>
+                <span style="font-size: small;">
+                    Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -
+                </span>
+            </div>
+        </div>
+    </body>
+
+</html>
