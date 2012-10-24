@@ -108,7 +108,7 @@
 
 
     function updatePluginView() {
-
+        // update here
     }
 
     function createElementWithId(elementTag, id) {
