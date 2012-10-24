@@ -6,16 +6,6 @@
         <script src="./passwordChecker.js">
         </script>
         <style>
-            /* #meter-bar { background-image: linear-gradient(left , rgb(255,0,0)
-            13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image: -o-linear-gradient(left
-            , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image:
-            -moz-linear-gradient(left , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0)
-            79%); background-image: -webkit-linear-gradient(left , rgb(255,0,0) 13%,
-            rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image: -ms-linear-gradient(left
-            , rgb(255,0,0) 13%, rgb(255,140,0) 57%, rgb(72,255,0) 79%); background-image:
-            -webkit-gradient( linear, left bottom, right bottom, color-stop(0.13, rgb(255,0,0)),
-            color-stop(0.57, rgb(255,140,0)), color-stop(0.79, rgb(72,255,0)) ); }
-            */
         </style>
     </head>
 
@@ -24,17 +14,11 @@
             Password:
             <input type="text" name="passowrd" id="formPassword" />
             <script>
-                    var passwordField = document.getElementById("formPassword");
-
-        var a = new PasswordComplexity();
-
-        a.bindTo(passwordField, {});
-
-        log(a);
-
-        passwordField.focus();
-
-
+                var passwordField = document.getElementById("formPassword");
+                var a = new PasswordComplexity();
+                a.bindTo(passwordField, {});
+                log(a);
+                passwordField.focus();
             </script>
         </div>
         <style>
@@ -55,8 +39,9 @@
             10px solid transparent; position: absolute; left: -20px; font-size: 0;
             }
         </style>
+        <!--
         <div id="password-strength-meter">
-            <div id="password-strength-direction" class="">
+             <div id="password-strength-direction" class="">
             </div>
             <div id="password-strength-direction2" class="">
             </div>
@@ -76,29 +61,25 @@
                 Password should:
                 <ul>
                     <li>
-                        <span id="numbers" class="check-icon">
-                        </span>
+                        <span id="numbers" class="check-icon"></span>
                         <label for="numbers">
                             have one number
                         </label>
                     </li>
                     <li>
-                        <span id="lower" class="check-icon">
-                        </span>
+                        <span id="lower" class="check-icon"></span>
                         <label for="lower">
                             have one lowercase character
                         </label>
                     </li>
                     <li>
-                        <span id="upper" class="check-icon">
-                        </span>
+                        <span id="upper" class="check-icon"></span>
                         <label for="upper">
                             have one uppercase character
                         </label>
                     </li>
                     <li>
-                        <span id="length" class="check-icon">
-                        </span>
+                        <span id="length" class="check-icon"></span>
                         <label for="length">
                             be between 6 and 30 characters
                         </label>
@@ -107,8 +88,9 @@
                 <span style="font-size: small;">
                     Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -
                 </span>
-            </div>
+            </div> 
         </div>
+        -->
     </body>
 
 </html>
