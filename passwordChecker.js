@@ -37,17 +37,21 @@
             symbol: 0,
             number: 0
         },
+        //
         reusltCutOffPoints = {
             WEAK: 33,
             STRONG: 66,
             SECURE: 99
         },
+        //
         regexTests = {
             lower: /[a-z]/g,
             upper: /[A-Z]/g,
             numbers: /[0-9]/g,
             symbols: /([_,#,@,%,\^,&,~,{,},(,),\-, ])/g
-        };
+        },
+        //
+        pluginElement;
 
     function analysePassword() {
         var length = passLength,
@@ -92,17 +96,33 @@
         passwordAnalytics.number = 0;
     }
 
-    function keyUpHandler() {
+    function keyUpEventHandler() {
         resetPasswordAnalytics();
         analysePassword();
         calculateResult();
     }
 
-    function bindEvent() {
+    function focusEventHandler() {
+        // body...
+        log("Focus event fired!", arguments);
+        pluginElement.style.display = "block";
+    }
+
+    function blurEventHandler() {
+        // body...
+        log("blur event fired!", arguments);
+        //pluginElement.style.display = "none";
+    }
+
+    function bindPluginEvents() {
         if (targetElement.addEventListener) {
-            targetElement.addEventListener('keyup', keyUpHandler);
+            targetElement.addEventListener('keyup', keyUpEventHandler);
+            targetElement.addEventListener('focus', focusEventHandler);
+            targetElement.addEventListener('blur', blurEventHandler);
         } else if (targetElement.attachEvent) {
-            targetElement.attachEvent('onkeyup', keyUpHandler);
+            targetElement.attachEvent('onkeyup', keyUpEventHandler);
+            targetElement.attachEvent('onfocus', focusEventHandler);
+            targetElement.attachEvent('onblur', blurEventHandler);
         }
     }
 
@@ -118,19 +138,21 @@
     }
 
     function updatePluginElements() {
-        var template = '<div id="password-strength-direction" class="">' + '</div>' + '<div id="password-strength-direction2" class="">' + '</div>' + '<span id="title">' + 'Password Strength' + '</span>' + '<div id="meter-container">' + '<div id="meter-outer" style="display:block; width: 100%; height: 5px; background-color: #efefef; overflow: hidden;">' + '<span id="meter-inner" style="display:block; height: 100%;">' + '</span>' + '</div>' + '<span id="meter-strength">' + 'Invalid' + '</span>' + '</div>' + '<div>' + 'Password should:' + '<ul>' + '<li>' + '<span id="numbers" class="check-icon"></span>' + '<label for="numbers">' + 'have one number' + '</label>' + '</li>' + '<li>' + '<span id="lower" class="check-icon"></span>' + '<label for="lower">' + 'have one lowercase character' + '</label>' + '</li>' + '<li>' + '<span id="upper" class="check-icon"></span>' + '<label for="upper">' + 'have one uppercase character' + '</label>' + '</li>' + '<li>' + '<span id="length" class="check-icon"></span>' + '<label for="length">' + 'be between 6 and 30 characters' + '</label>' + '</li>' + '</ul>' + '<span style="font-size: small;">' + 'Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -' + '</span>' + '</div>',
-            e = createElementWithId('div', 'password-strength-meter');
 
-        e.innerHTML = template;
+        // Template for the plugin
+        // FIXME this can be moved to a parameter configured by the user
 
-        document.body.appendChild(e);
-        /*var direction1 = createElementWithId('div', 'password-strength-direction'),
-            direction2 = createElementWithId('div', 'password-strength-direction2'),
-            title = createElementWithId('span', 'title'),
-            meterContainer  = createElementWithId('div', 'meter-container'),
-            meterOuter = createElementWithId('div', 'meter-outer'),
-            meterInner = createElementWithId('span', 'meter-inner'),
-            meterInner = createElementWithId('span', 'meter-strength'),*/
+        //var template = '<div id="password-strength-direction" class="">' + '</div>' + '<div id="password-strength-direction2" class="">' + '</div>' + '<span id="title">' + 'Password Strength' + '</span>' + '<div id="meter-container">' + '<div id="meter-outer" style="display:block; width: 100%; height: 5px; background-color: #efefef; overflow: hidden;">' + '<span id="meter-inner" style="display:block; height: 100%;">' + '</span>' + '</div>' + '<span id="meter-strength">' + 'Invalid' + '</span>' + '</div>' + '<div>' + 'Password should:' + '<ul>' + '<li>' + '<span id="numbers" class="check-icon"></span>' + '<label for="numbers">' + 'have one number' + '</label>' + '</li>' + '<li>' + '<span id="lower" class="check-icon"></span>' + '<label for="lower">' + 'have one lowercase character' + '</label>' + '</li>' + '<li>' + '<span id="upper" class="check-icon"></span>' + '<label for="upper">' + 'have one uppercase character' + '</label>' + '</li>' + '<li>' + '<span id="length" class="check-icon"></span>' + '<label for="length">' + 'be between 6 and 30 characters' + '</label>' + '</li>' + '</ul>' + '<span style="font-size: small;">' + 'Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -' + '</span>' + '</div>';
+
+        var template = document.getElementById('pass-meter-template').textContent;
+
+        // create the plug-in main element
+        pluginElement = createElementWithId('div', 'password-strength-meter');
+
+        pluginElement.innerHTML = template;
+
+        document.body.appendChild(pluginElement);
+
     }
 
     proto.bindTo = function bindTo(element, options) {
@@ -139,15 +161,19 @@
             throw 'element is missing';
         }
 
+        // set the local variables
         targetElement = element;
         passValue = element.value;
         passChar = passValue.split('');
         passLength = passChar.length;
 
+        // update the plug-in elements - this will create the plug-in body and attach it to the dom
         updatePluginElements();
 
-        bindEvent();
+        // bind the events to the plug-in body
+        bindPluginEvents();
 
+        // prepare the analytics object by resetting it
         resetPasswordAnalytics();
     };
 
