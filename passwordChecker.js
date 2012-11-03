@@ -196,11 +196,11 @@
     }
 
     function focusEventHandler() {
-        // pluginElement.style.display = "block";
+        pluginElement.style.display = "block";
     }
 
     function blurEventHandler() {
-        // pluginElement.style.display = "none";
+        pluginElement.style.display = "none";
     }
 
     function bindPluginEvents() {
