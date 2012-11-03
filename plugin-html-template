@@ -12,7 +12,7 @@
                     <span id="meter-inner" style="display:block; height: 100%;">
                     </span>
                 </div>
-                <span id="meter-strength">
+                <span id="password-strength-meter-meter-strength">
                     Invalid
                 </span>
             </div>
@@ -47,6 +47,6 @@
                 <span style="font-size: small;">
                     Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -
                 </span>
-            </div> 
+            </div>
         </div>
         -->

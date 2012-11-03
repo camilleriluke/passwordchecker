@@ -20,7 +20,7 @@
                 secure: "Secure"
             },
             config: {
-                minLength: 0,
+                minLength: 6,
                 maxLength: 30
             }
         },
@@ -51,15 +51,29 @@
             symbols: /([_,#,@,%,\^,&,~,{,},(,),\-, ])/g
         },
         //
-        pluginElement;
+        score,
+        pluginElement,
+        numberSpan,
+        lowerSpan,
+        upperSpan,
+        lengthSpan,
+        meterStrength,
+        charFactor = (24 / 4),
+        complexityFactor = {
+            lower: (charFactor),
+            upper: (charFactor),
+            numbers: (charFactor),
+            symbols: (charFactor * 2)
+        };
 
     function analysePassword() {
+
+        passValue = targetElement.value;
+        passChar = passValue.split('');
+        passLength = passChar.length;
+
         var length = passLength,
             currentChar;
-
-        if (length < pluginOptions.config.minLength || length > pluginOptions.config.maxLength) {
-            return;
-        }
 
         while (length--) {
 
@@ -74,7 +88,7 @@
             }
 
             if (currentChar.match(regexTests.numbers)) {
-                passwordAnalytics.numbers++;
+                passwordAnalytics.number++;
             }
 
             if (currentChar.match(regexTests.symbols)) {
@@ -85,21 +99,93 @@
 
     function calculateResult() {
 
+        if (passValue.match(/[0-9a-zA-Z_,#,@,%,\^,&,~,{,},(,),\-, ]/g).length !== passValue.length) {
+            return;
+        }
+
+        if (passwordAnalytics.lower <= 0 || passwordAnalytics.upper <= 0 || passwordAnalytics.number <= 0 || passLength <= pluginOptions.config.minLength || passLength >= pluginOptions.config.maxLength) {
+            score = 0;
+            return;
+        } else {
+            score += (passwordAnalytics.upper * complexityFactor.upper);
+            score += (passwordAnalytics.lower * complexityFactor.lower);
+            score += (passwordAnalytics.number * complexityFactor.numbers);
+            score += (passwordAnalytics.symbol * complexityFactor.symbols);
+        }
     }
 
     function resetPasswordAnalytics() {
         // reset password analytics object
         // FIXME this could probably be improved into a reset object function
+        score = 0;
         passwordAnalytics.lower = 0;
         passwordAnalytics.upper = 0;
         passwordAnalytics.symbol = 0;
         passwordAnalytics.number = 0;
     }
 
+    function updatePluginView() {
+        var lowerClass = lowerSpan.getAttribute('class'),
+            upperClass = upperSpan.getAttribute('class'),
+            numberClass = numberSpan.getAttribute('class'),
+            lengthClass = lengthSpan.getAttribute('class'),
+            bgColor;
+
+        if (passwordAnalytics.lower > 0) {
+            lowerClass = (lowerClass.match(/checked/)) ? lowerClass : lowerClass += ' checked';
+        } else {
+            lowerClass = lowerClass.replace('checked', '');
+        }
+        lowerSpan.setAttribute('class', lowerClass);
+
+
+        if (passwordAnalytics.upper > 0) {
+            upperClass = (upperClass.match(/checked/)) ? upperClass : upperClass += ' checked';
+        } else {
+            upperClass = upperClass.replace('checked', '');
+        }
+        upperSpan.setAttribute('class', upperClass);
+
+        if (passwordAnalytics.number > 0) {
+            numberClass = (numberClass.match(/checked/)) ? numberClass : numberClass += ' checked';
+        } else {
+            numberClass = numberClass.replace('checked', '');
+        }
+        numberSpan.setAttribute('class', numberClass);
+
+        if (passLength >= pluginOptions.config.minLength && passLength <= pluginOptions.config.maxLength) {
+            lengthClass = (lengthClass.match(/checked/)) ? lengthClass : lengthClass += ' checked';
+        } else {
+            lengthClass = lengthClass.replace('checked', '');
+        }
+        lengthSpan.setAttribute('class', lengthClass);
+
+
+        if (score < 33) {
+            meterStrength.textContent = "Invalid";
+            bgColor = 'red';
+        } else if (score >= 0 && score < 66) {
+            meterStrength.textContent = "Weak";
+            bgColor = 'yellow';
+        } else if (score >= 66 && score < 99) {
+            meterStrength.textContent = "Strong";
+            bgColor = 'orange';
+        } else if (score >= 99) {
+            meterStrength.textContent = "Secure";
+            bgColor = 'green';
+        }
+
+        document.getElementById('meter-inner').style['background-color'] = bgColor;
+        document.getElementById('meter-inner').style.width = score+'%';
+
+
+    }
+
     function keyUpEventHandler() {
         resetPasswordAnalytics();
         analysePassword();
         calculateResult();
+        updatePluginView();
     }
 
     function focusEventHandler() {
@@ -126,11 +212,6 @@
         }
     }
 
-
-    function updatePluginView() {
-        // update here
-    }
-
     function createElementWithId(elementTag, id) {
         var e = document.createElement(elementTag);
         e.setAttribute('id', id);
@@ -153,6 +234,12 @@
 
         document.body.appendChild(pluginElement);
 
+        lowerSpan = document.getElementById('password-strength-meter-lower');
+        upperSpan = document.getElementById('password-strength-meter-upper');
+        numberSpan = document.getElementById('password-strength-meter-numbers');
+        lengthSpan = document.getElementById('password-strength-meter-length');
+        meterStrength = document.getElementById('password-strength-meter-meter-strength');
+
     }
 
     proto.bindTo = function bindTo(element, options) {
@@ -163,9 +250,6 @@
 
         // set the local variables
         targetElement = element;
-        passValue = element.value;
-        passChar = passValue.split('');
-        passLength = passChar.length;
 
         // update the plug-in elements - this will create the plug-in body and attach it to the dom
         updatePluginElements();
