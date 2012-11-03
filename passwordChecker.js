@@ -164,24 +164,22 @@
 
         if (score < 33) {
 
-                meterStrength.innerHTML = "Invalid";
-
+            meterStrength.innerHTML = "Invalid";
             bgColor = 'red';
+
         } else if (score >= 0 && score < 66) {
 
             meterStrength.innerHTML = "Weak";
-
             bgColor = 'yellow';
         } else if (score >= 66 && score < 99) {
 
-                meterStrength.innerHTML = "Strong";
-
+            meterStrength.innerHTML = "Strong";
             bgColor = 'orange';
         } else if (score >= 99) {
 
-                meterStrength.innerHTML = "Secure";
-
+            meterStrength.innerHTML = "Secure";
             bgColor = 'green';
+
         }
 
         document.getElementById('meter-inner').style['background-color'] = bgColor;
@@ -238,6 +236,10 @@
         pluginElement.innerHTML = template;
 
         document.body.appendChild(pluginElement);
+
+        // FIXME on IE7
+        pluginElement.style.top = (targetElement.offsetTop + (targetElement.offsetHeight / 2) - 28) + 'px';
+        pluginElement.style.left = (targetElement.offsetWidth + targetElement.offsetLeft + 15) + 'px';
 
         lowerSpan = document.getElementById('password-strength-meter-lower');
         upperSpan = document.getElementById('password-strength-meter-upper');
