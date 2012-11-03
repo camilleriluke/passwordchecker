@@ -99,7 +99,8 @@
 
     function calculateResult() {
 
-        if (passValue.match(/[0-9a-zA-Z_,#,@,%,\^,&,~,{,},(,),\-, ]/g).length !== passValue.length) {
+        var match = passValue.match(/[0-9a-zA-Z_,#,@,%,\^,&,~,{,},(,),\-, ]/g);
+        if (match && (match.length !== passValue.length)) {
             return;
         }
 
@@ -125,10 +126,10 @@
     }
 
     function updatePluginView() {
-        var lowerClass = lowerSpan.getAttribute('class'),
-            upperClass = upperSpan.getAttribute('class'),
-            numberClass = numberSpan.getAttribute('class'),
-            lengthClass = lengthSpan.getAttribute('class'),
+        var lowerClass = lowerSpan.className,
+            upperClass = upperSpan.className,
+            numberClass = numberSpan.className,
+            lengthClass = lengthSpan.className,
             bgColor;
 
         if (passwordAnalytics.lower > 0) {
@@ -136,7 +137,7 @@
         } else {
             lowerClass = lowerClass.replace('checked', '');
         }
-        lowerSpan.setAttribute('class', lowerClass);
+        lowerSpan.className = lowerClass;
 
 
         if (passwordAnalytics.upper > 0) {
@@ -144,39 +145,47 @@
         } else {
             upperClass = upperClass.replace('checked', '');
         }
-        upperSpan.setAttribute('class', upperClass);
+        upperSpan.className = upperClass;
 
         if (passwordAnalytics.number > 0) {
             numberClass = (numberClass.match(/checked/)) ? numberClass : numberClass += ' checked';
         } else {
             numberClass = numberClass.replace('checked', '');
         }
-        numberSpan.setAttribute('class', numberClass);
+        numberSpan.className = numberClass;
 
         if (passLength >= pluginOptions.config.minLength && passLength <= pluginOptions.config.maxLength) {
             lengthClass = (lengthClass.match(/checked/)) ? lengthClass : lengthClass += ' checked';
         } else {
             lengthClass = lengthClass.replace('checked', '');
         }
-        lengthSpan.setAttribute('class', lengthClass);
+        lengthSpan.className = lengthClass;
 
 
         if (score < 33) {
-            meterStrength.textContent = "Invalid";
+
+                meterStrength.innerHTML = "Invalid";
+
             bgColor = 'red';
         } else if (score >= 0 && score < 66) {
-            meterStrength.textContent = "Weak";
+
+            meterStrength.innerHTML = "Weak";
+
             bgColor = 'yellow';
         } else if (score >= 66 && score < 99) {
-            meterStrength.textContent = "Strong";
+
+                meterStrength.innerHTML = "Strong";
+
             bgColor = 'orange';
         } else if (score >= 99) {
-            meterStrength.textContent = "Secure";
+
+                meterStrength.innerHTML = "Secure";
+
             bgColor = 'green';
         }
 
         document.getElementById('meter-inner').style['background-color'] = bgColor;
-        document.getElementById('meter-inner').style.width = score+'%';
+        document.getElementById('meter-inner').style.width = score + '%';
 
 
     }
@@ -189,15 +198,11 @@
     }
 
     function focusEventHandler() {
-        // body...
-        log("Focus event fired!", arguments);
-        pluginElement.style.display = "block";
+        // pluginElement.style.display = "block";
     }
 
     function blurEventHandler() {
-        // body...
-        log("blur event fired!", arguments);
-        //pluginElement.style.display = "none";
+        // pluginElement.style.display = "none";
     }
 
     function bindPluginEvents() {
@@ -225,7 +230,7 @@
 
         //var template = '<div id="password-strength-direction" class="">' + '</div>' + '<div id="password-strength-direction2" class="">' + '</div>' + '<span id="title">' + 'Password Strength' + '</span>' + '<div id="meter-container">' + '<div id="meter-outer" style="display:block; width: 100%; height: 5px; background-color: #efefef; overflow: hidden;">' + '<span id="meter-inner" style="display:block; height: 100%;">' + '</span>' + '</div>' + '<span id="meter-strength">' + 'Invalid' + '</span>' + '</div>' + '<div>' + 'Password should:' + '<ul>' + '<li>' + '<span id="numbers" class="check-icon"></span>' + '<label for="numbers">' + 'have one number' + '</label>' + '</li>' + '<li>' + '<span id="lower" class="check-icon"></span>' + '<label for="lower">' + 'have one lowercase character' + '</label>' + '</li>' + '<li>' + '<span id="upper" class="check-icon"></span>' + '<label for="upper">' + 'have one uppercase character' + '</label>' + '</li>' + '<li>' + '<span id="length" class="check-icon"></span>' + '<label for="length">' + 'be between 6 and 30 characters' + '</label>' + '</li>' + '</ul>' + '<span style="font-size: small;">' + 'Note: Special characters allowed are: _ # % ^ &amp; ~ { } ( ) -' + '</span>' + '</div>';
 
-        var template = document.getElementById('pass-meter-template').textContent;
+        var template = document.getElementById('pass-meter-template').textContent || document.getElementById('pass-meter-template').text;
 
         // create the plug-in main element
         pluginElement = createElementWithId('div', 'password-strength-meter');
