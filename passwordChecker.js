@@ -253,13 +253,6 @@
 
         document.getElementById('password-strength-meter-sidebar-arrow').style.top = pluginOptions.config.sideBarTop + "px";
 
-        // pluginElement.style.top = (targetElement.offsetTop + (targetElement.offsetHeight / 2) - 28) + 'px';
-        // pluginElement.style.left = (targetElement.offsetWidth + targetElement.offsetLeft + 15) + 'px';
-
-
-        // console.log($(pluginElement).offset());
-        // console.log($(pluginElement).position());
-
         lowerSpan = document.getElementById('password-strength-meter-lower');
         upperSpan = document.getElementById('password-strength-meter-upper');
         numberSpan = document.getElementById('password-strength-meter-numbers');
