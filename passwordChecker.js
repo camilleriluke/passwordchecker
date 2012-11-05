@@ -1,11 +1,13 @@
-(function (exports) {
+(function (exports, $) {
     // Place the script in strict mode
     'use strict';
 
-    /*global define, log, document*/
+    /*global define, log, document, jQuery*/
     /*jslint plusplus: true */
 
     function PasswordComplexity() {}
+
+    PasswordComplexity.Version = "0.1.9d84e93";
 
     var proto = PasswordComplexity.prototype,
         // the element on which the plug-in is bound
@@ -21,7 +23,9 @@
             },
             config: {
                 minLength: 6,
-                maxLength: 30
+                maxLength: 30,
+                top: 0,
+                sideBarTop : 0
             }
         },
         // the password values that will be retrieved from the target element
@@ -196,6 +200,7 @@
     }
 
     function focusEventHandler() {
+        pluginElement.style.left = ($(targetElement).width() + 25) + "px";
         pluginElement.style.display = "block";
     }
 
@@ -221,6 +226,10 @@
         return e;
     }
 
+    function insertAfter(referenceNode, newNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
     function updatePluginElements() {
 
         // Template for the plugin
@@ -235,11 +244,21 @@
 
         pluginElement.innerHTML = template;
 
-        document.body.appendChild(pluginElement);
+        insertAfter(targetElement, pluginElement);
+        // document.body.appendChild(pluginElement);
 
         // FIXME on IE7
-        pluginElement.style.top = (targetElement.offsetTop + (targetElement.offsetHeight / 2) - 28) + 'px';
-        pluginElement.style.left = (targetElement.offsetWidth + targetElement.offsetLeft + 15) + 'px';
+        pluginElement.style.left = ($(targetElement).width() + 25) + "px";
+        pluginElement.style.top = pluginOptions.config.top + "px";
+
+        document.getElementById('password-strength-meter-sidebar-arrow').style.top = pluginOptions.config.sideBarTop + "px";
+
+        // pluginElement.style.top = (targetElement.offsetTop + (targetElement.offsetHeight / 2) - 28) + 'px';
+        // pluginElement.style.left = (targetElement.offsetWidth + targetElement.offsetLeft + 15) + 'px';
+
+
+        // console.log($(pluginElement).offset());
+        // console.log($(pluginElement).position());
 
         lowerSpan = document.getElementById('password-strength-meter-lower');
         upperSpan = document.getElementById('password-strength-meter-upper');
@@ -254,6 +273,9 @@
         if (!element) {
             throw 'element is missing';
         }
+
+        pluginOptions.config.top = options.top || pluginOptions.config.top;
+        pluginOptions.config.sideBarTop = options.sideBarTop || pluginOptions.config.sideBarTop;
 
         // set the local variables
         targetElement = element;
@@ -278,4 +300,4 @@
     } else {
         exports.PasswordComplexity = PasswordComplexity;
     }
-}(this));
+}(this, jQuery));
