@@ -15,10 +15,9 @@
         // object with the plug-in options
         pluginOptions = {
             text: {
-                title: "Password Strength meter",
                 invalid: "Invalid",
                 weak: "Weak",
-                strong: "String",
+                strong: "Strong",
                 secure: "Secure"
             },
             config: {
@@ -108,7 +107,7 @@
             return;
         }
 
-        if (passwordAnalytics.lower <= 0 || passwordAnalytics.upper <= 0 || passwordAnalytics.number <= 0 || passLength <= pluginOptions.config.minLength || passLength >= pluginOptions.config.maxLength) {
+        if (passwordAnalytics.lower <= 0 || passwordAnalytics.upper <= 0 || passwordAnalytics.number <= 0 || passLength < pluginOptions.config.minLength || passLength > pluginOptions.config.maxLength) {
             score = 0;
             return;
         } else {
@@ -168,20 +167,20 @@
 
         if (score < 33) {
 
-            meterStrength.innerHTML = "Invalid";
+            meterStrength.innerHTML = pluginOptions.text.invalid;
             bgColor = 'red';
 
         } else if (score >= 0 && score < 66) {
 
-            meterStrength.innerHTML = "Weak";
+            meterStrength.innerHTML = pluginOptions.text.weak;
             bgColor = 'yellow';
         } else if (score >= 66 && score < 99) {
 
-            meterStrength.innerHTML = "Strong";
+            meterStrength.innerHTML = pluginOptions.text.strong;
             bgColor = 'orange';
         } else if (score >= 99) {
 
-            meterStrength.innerHTML = "Secure";
+            meterStrength.innerHTML = pluginOptions.text.secure;
             bgColor = 'green';
 
         }
@@ -259,6 +258,8 @@
         lengthSpan = document.getElementById('password-strength-meter-length');
         meterStrength = document.getElementById('password-strength-meter-meter-strength');
 
+        meterStrength.innerHTML = pluginOptions.text.invalid;
+
     }
 
     proto.bindTo = function bindTo(element, options) {
@@ -269,6 +270,11 @@
 
         pluginOptions.config.top = options.top || pluginOptions.config.top;
         pluginOptions.config.sideBarTop = options.sideBarTop || pluginOptions.config.sideBarTop;
+
+        pluginOptions.text.invalid = (options.text && options.text.invalid) || pluginOptions.text.invalid;
+        pluginOptions.text.weak = (options.text && options.text.weak) || pluginOptions.text.weak;
+        pluginOptions.text.strong = (options.text && options.text.strong) || pluginOptions.text.strong;
+        pluginOptions.text.secure = (options.text && options.text.secure) || pluginOptions.text.secure;
 
         // set the local variables
         targetElement = element;
