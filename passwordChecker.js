@@ -95,7 +95,7 @@
             }
 
             if (currentChar.match(regexTests.symbols)) {
-                passwordAnalytics.symbols++;
+                passwordAnalytics.symbol++;
             }
         }
     }
