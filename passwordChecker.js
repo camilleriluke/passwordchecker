@@ -7,7 +7,7 @@
 
     function PasswordComplexity() {}
 
-    PasswordComplexity.Version = "0.1.a7db1ad";
+    PasswordComplexity.Version = "0.1.3d638e0";
 
     var proto = PasswordComplexity.prototype,
         // the element on which the plug-in is bound
